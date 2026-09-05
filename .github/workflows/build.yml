@@ -14,10 +14,17 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      
+      - name: Create Capacitor Config
+        run: |
+          echo '{"appId":"com.baramoon.souq","appName":"Souq","webDir":"www","bundledWebRuntime":false}' > capacitor.config.json
+          mkdir -p www
+          cp index.html www/index.html
+          cp -r *.html www/ 2>/dev/null || true
+
       - run: npm install @capacitor/core @capacitor/cli @capacitor/android
-      - run: npx cap init "Souq" com.baramoon.souq --web-dir=.
       - run: npx cap add android
-      - run: npx cap copy
+      - run: npx cap copy android
       - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
