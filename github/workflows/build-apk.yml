@@ -1,0 +1,27 @@
+name: Build APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build APK from HTML
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: APK Ready
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npx @capacitor/cli init souq com.baramoon.souq --web-dir=.
+      - run: npx cap add android
+      - run: npx cap copy android
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: cd android &&./gradlew assembleDebug
+      - uses: actions/upload-artifact@v3
+        with:
+          name: souq-albaramoon-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
