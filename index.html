@@ -4,105 +4,85 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سوق البرامون</title>
 <style>
-*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') center/cover fixed;min-height:100vh;padding-bottom:100px}
-.glass{background:rgba(255,255,255,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.5);border-radius:20px;box-shadow:0 8px 25px rgba(0,0,0,.12)}
-.ticker{margin:10px;border-radius:25px;padding:10px 14px;display:flex;gap:10px;align-items:center;white-space:nowrap;overflow:hidden;background:linear-gradient(90deg,#fff7e6,#ffe7b3);font-size:13px}
-.ticker span{animation:scroll 20s linear infinite}
-@keyframes scroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+*{box-sizing:border-box;font-family:system-ui}body{margin:0;min-height:100vh;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') center/cover fixed;padding-bottom:110px}
+.glass{background:rgba(255,255,255,.92);backdrop-filter:blur(15px);border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
 .header{margin:12px;padding:14px;display:flex;justify-content:space-between;align-items:center}
-.search{margin:10px 12px;padding:13px 15px;display:flex;align-items:center;gap:10px}
-.search input{border:none;background:none;width:100%;outline:none;font-size:15px}
-.view{display:none;padding:0 12px}.view.active{display:block}
-.cats{display:flex;gap:10px;overflow-x:auto;padding:10px 0}
-.cat{min-width:85px;height:95px;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:bold}
-.offers{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px}
-.offer-card{min-width:135px;border-radius:18px;overflow:hidden;padding:0}
-.offer-img{height:110px;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.offer-img img{width:100%;height:100%;object-fit:contain; /* الحل اللي في صورتك - الصورة كاملة بدون قص */}
-.offer-info{padding:8px}
-.price{color:#b45309;font-weight:bold}
-.btn-plus{background:#f59e0b;color:#fff;border:none;width:26px;height:26px;border-radius:50%;float:left;cursor:pointer}
-.bottom-nav{position:fixed;bottom:10px;left:10px;right:10px;display:flex;justify-content:space-around;align-items:center;padding:10px;z-index:99}
-.nav-item{border:none;background:none;color:#6b7280;cursor:pointer;font-size:12px}
-.nav-item.active{color:#065f46;font-weight:bold}
-.add-btn{width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;font-size:30px;border:none;margin-top:-20px}
-/* صفحة المنتج */
-.detail-img{height:320px;background:#fff;border-radius:20px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.detail-img img{width:100%;height:100%;object-fit:contain}
-.thumbs{display:flex;gap:8px;overflow-x:auto;margin:10px 0}
-.thumbs div{width:65px;height:65px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;border:2px solid transparent;cursor:pointer}
-.thumbs div.active{border-color:#10b981}
-.btns{display:flex;gap:10px;margin-top:12px}
-.btn-call{flex:1;padding:12px;border:2px solid #065f46;border-radius:12px;background:#fff;font-weight:bold}
-.btn-wa{flex:2;padding:12px;border:none;border-radius:12px;background:linear-gradient(90deg,#25d366,#10b981);color:#fff;font-weight:bold}
-/* صفحة حسابي - بروفايل التاجر */
-.profile-cover{height:180px;background:url('https://images.unsplash.com/photo-1488459716781-31db52582fe9') center/cover;border-radius:0 0 20px 20px}
-.profile-avatar{width:110px;height:110px;border-radius:50%;border:4px solid #fff;margin:-55px auto 10px;display:block;background:#fff;object-fit:cover}
+.view{display:none;padding:12px}.view.active{display:block}
+.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:rgba(255,255,255,.96);border-radius:30px;display:flex;justify-content:space-around;align-items:center;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:50}
+.nav-item{border:none;background:none;font-size:11px;color:#888}.nav-item.active{color:#10b981;font-weight:bold}
+.add-btn{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;font-size:32px;border:none;margin-top:-25px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:200;padding:15px}
+.modal.open{display:flex}.modal-box{background:#fff;width:100%;max-width:380px;border-radius:20px;padding:20px}
+input{width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:12px}
+.btn-main{background:#10b981;color:#fff;border:none;padding:13px;width:100%;border-radius:12px;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
 
-<div class="ticker glass"><span>📢 عرض لفترة محدودة - خصم 20% على الخضار الطازجة - شحن مجاني للطلبات فوق 150 جنيه - هدية مع أول طلب • عرض لفترة محدودة - خصم 20% •</span></div>
-
 <div class="header glass">
-<div style="display:flex;gap:10px;align-items:center"><div style="width:48px;height:48px;background:linear-gradient(135deg,#fef3c7,#f59e0b);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px">🧺</div><div><b style="font-size:18px">سوق البرامون</b><br><small>📍 البرامون • الدقهلية</small></div></div>
-<div style="display:flex;gap:15px;font-size:22px"><span onclick="showView('fav')">🤍</span><span>🔔</span></div>
+<div style="display:flex;gap:10px;align-items:center"><div style="width:42px;height:42px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;display:flex;align-items:center;justify-content:center">🛒</div><div><b>سوق البرامون</b><br><small>سوق بلدنا من خير بلدنا</small></div></div>
+<div style="display:flex;gap:10px"><button onclick="adminLogin()" style="border:none;background:#fff3cd;padding:6px 10px;border-radius:10px;font-size:12px">🔐 مدير</button><button onclick="showView('account')" style="border:none;background:none;font-size:22px">⚙️</button></div>
 </div>
 
-<div class="search glass"><span>🔍</span><input id="searchInput" placeholder="ابحث عن منتجات، خضار، فاكهة، عسل..." oninput="searchProd(this.value)"><span>⚙️</span></div>
+<div id="home" class="view active"><div class="glass" style="padding:30px;text-align:center">أهلا بيك في سوق البرامون<br>المنتجات هتظهر هنا</div></div>
+<div id="cats" class="view"><div class="glass" style="padding:20px">الفئات</div></div>
+<div id="fav" class="view"><div class="glass" style="padding:20px">المفضلة</div></div>
 
-<!-- الرئيسية -->
-<div id="home" class="view active">
-<div style="padding:10px"><b style="font-size:20px">أهلاً، أحمد!</b><br><small>تسوق المنتجات الطازجة من قلب الريف المصري</small></div>
-<div style="display:flex;justify-content:space-between;margin:10px 5px"><b>الفئات</b><span onclick="showView('cats')" style="color:#b45309;cursor:pointer">عرض الكل</span></div>
-<div class="cats">
-<button class="cat glass" onclick="filterCat('عسل')">💧<br>عسل</button>
-<button class="cat glass" onclick="filterCat('محلية')">🍯<br>منتجات محلية</button>
-<button class="cat glass" onclick="filterCat('مخبوزات')">🥖<br>مخبوزات</button>
-<button class="cat glass" onclick="filterCat('ألبان')">🫙<br>منتجات الألبان</button>
-<button class="cat glass" onclick="filterCat('خضار')">🌿<br>خضار وفاكهة</button>
+<!-- حسابي - شغال 100% -->
+<div id="account" class="view active">
+<h3 style="text-align:right">👤 حسابي</h3>
+<div class="glass" style="padding:20px">
+<p>تاجر في سوق البرامون</p>
+<p><b>الاسم:</b> <span id="uName">ضيف البرامون</span></p>
+<p><b>الهاتف:</b> <span id="uPhone">01000000000</span></p>
+<p><b>المنطقة:</b> <span id="uArea">البرامون - دقهلية</span></p>
+<button class="btn-main" onclick="openEdit()">تعديل حسابي</button>
+<div style="margin-top:12px;display:flex;gap:8px">
+<button onclick="adminLogin()" style="flex:1;padding:10px;border:1px solid #f59e0b;background:#fffbeb;border-radius:10px">🔐 الدخول كـ مدير</button>
+<button onclick="logout()" style="flex:1;padding:10px;border:1px solid #ddd;background:#fff;border-radius:10px">تسجيل خروج</button>
 </div>
-<div class="glass" style="padding:12px;margin-top:12px"><div style="display:flex;justify-content:space-between"><b>العروض المميزة</b><small>✨ يتم التحديث تلقائياً</small></div>
-<div class="offers" id="offers" style="margin-top:10px"></div></div>
-<div class="glass" style="padding:12px;margin-top:12px;text-align:center">🚚 اطلب الآن وشحن مجاني للطلبات +150 جنيه</div>
+<div id="adminPanel" style="display:none;margin-top:15px;background:#fef2f2;padding:12px;border-radius:12px;border:1px solid #fecaca">
+<b>🛡️ لوحة تحكم المدير</b><br><small>انت الآن مدير</small><br>
+<button class="btn-main" style="background:#ef4444;margin-top:8px" onclick="clearAll()">مسح كل المنتجات</button>
+<button class="btn-main" style="background:#6b7280;margin-top:8px" onclick="closeAdmin()">خروج من وضع المدير</button>
+</div>
+</div>
 </div>
 
-<!-- تفاصيل المنتج -->
-<div id="product" class="view">
-<div style="display:flex;justify-content:space-between;align-items:center;padding:10px"><button onclick="showView('home')" style="border:none;background:rgba(255,255,255,.8);width:38px;height:38px;border-radius:50%">←</button><b>تفاصيل المنتج</b><div style="display:flex;gap:10px"><span>↗️</span><span>🤍</span></div></div>
-<div class="glass" style="padding:10px"><div class="detail-img" id="detailImg"><img id="dMainImg" src=""></div><div class="thumbs" id="thumbs"></div>
-<h2 id="dName"></h2><h2 id="dPrice" style="color:#065f46"></h2>
-<div class="glass" style="padding:10px;margin:10px 0" onclick="showView('account')"><b id="dStore"></b><br><small>⭐ 4.7 (128 تقييم) • موثق ✅</small></div>
-<p id="dDesc" style="font-size:14px;line-height:1.6"></p>
-<div class="btns"><button class="btn-call">📞 اتصال</button><button class="btn-wa" onclick="window.open('https://wa.me/201011223344')">تواصل عبر واتساب</button></div>
+<div class="bottom-nav">
+<button class="nav-item" id="n-home" onclick="showView('home')">🏠<br>الرئيسية</button>
+<button class="nav-item" id="n-cats" onclick="showView('cats')">📦<br>الفئات</button>
+<button class="add-btn" onclick="alert('اضافة منتج')">+</button>
+<button class="nav-item" id="n-fav" onclick="showView('fav')">❤️<br>المفضلة</button>
+<button class="nav-item active" id="n-account" onclick="showView('account')">👤<br>حسابي</button>
+</div>
+
+<!-- مودال تعديل الحساب -->
+<div class="modal" id="editModal"><div class="modal-box">
+<h3>تعديل حسابي ✏️</h3>
+<input id="eName" placeholder="اسمك">
+<input id="ePhone" placeholder="رقم التليفون">
+<input id="eArea" placeholder="المنطقة - مثال: البرامون">
+<button class="btn-main" onclick="saveProfile()">حفظ التعديلات ✅</button>
+<button onclick="closeEdit()" style="width:100%;margin-top:10px;background:none;border:none;color:#888">إلغاء</button>
 </div></div>
 
-<!-- حسابي / بروفايل التاجر - زي الصورة الأخيرة -->
-<div id="account" class="view">
-<div class="profile-cover"></div>
-<img class="profile-avatar" src="https://i.pravatar.cc/150?img=12">
-<div style="text-align:center"><h2 style="margin:5px">محمد علي <span style="color:#3b82f6">✓</span></h2><p>🏪 متجر النيل للمواد الغذائية - البرامون</p><span style="background:#dcfce7;padding:4px 10px;border-radius:20px;font-size:12px">✅ موثق</span></div>
-<div class="glass" style="padding:12px;margin:12px"><div>📞 01011223344</div><hr><div>🟢 واتساب: متاح للتواصل</div><hr><div>📍 العنوان: البرامون - المنصورة</div><hr><div>📄 ملاحظات: تاجر موثوق منذ 2023 • يرد خلال ساعة</div></div>
-<div class="glass" style="padding:12px;margin:12px"><b>البطاقة الضريبية والسجل التجاري (اختياري)</b><div style="display:flex;gap:10px;margin-top:10px"><div style="flex:1;border:1px dashed #999;padding:15px;border-radius:12px;text-align:center">⬆️ سجل تجاري<br><small style="color:#10b981">ارفع الملف</small></div><div style="flex:1;border:1px dashed #999;padding:15px;border-radius:12px;text-align:center">☁️ بطاقة ضريبية<br><small style="color:#10b981">ارفع الملف</small></div></div></div>
-<div style="display:flex;gap:8px;margin:12px"><button class="glass" style="flex:1;padding:10px;border:none;font-weight:bold;color:#065f46">قائمة إعلاناته</button><button class="glass" style="flex:1;padding:10px;border:none">التقييمات</button><button class="glass" style="flex:1;padding:10px;border:none">المزيد</button></div>
-<div id="merchantProducts" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px"></div>
-</div>
-
-<div id="cats" class="view"><h3>الفئات</h3><div id="catList"></div></div>
-<div id="fav" class="view"><h3>المفضلة ❤️</h3><div id="favList"></div></div>
-
-<div class="bottom-nav glass">
-<button class="nav-item active" id="n-home" onclick="showView('home')">🏠<br>الرئيسية</button>
-<button class="nav-item" id="n-cats" onclick="showView('cats')">⊞<br>الفئات</button>
-<button class="add-btn" onclick="alert('إضافة منتج - قريبا')">+</button>
-<button class="nav-item" id="n-fav" onclick="showView('fav')">❤️<br>المفضلة</button>
-<button class="nav-item" id="n-account" onclick="showView('account')">👤<br>حسابي</button>
-</div>
-
 <script>
-let products=[
-{name:"زيت زيتون 500 معصور بارد",price:90,cat:"محلية",store:"متجر النيل - البرامون",img:"https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5",desc:"زيت عباد شمس نقي 1 لتر معصور على البارد مناسب للقلي والطهي اليومي خال من المواد الحافظة"},
-{name:"خيار بلدي 1 كجم مقرمش",price:18,cat:"خضار",store:"متجر الخضار الطازج",img:"https://images.unsplash.com/photo-1589621316382-008455b857cd",desc:"خيار بلدي طازج من أرض البرامون"},
+let user = JSON.parse(localStorage.getItem('user') || '{"name":"ضيف البرامون","phone":"01000000000","area":"البرامون - دقهلية"}');
+function loadUser(){document.getElementById('uName').innerText=user.name;document.getElementById('uPhone').innerText=user.phone;document.getElementById('uArea').innerText=user.area;document.getElementById('eName').value=user.name;document.getElementById('ePhone').value=user.phone;document.getElementById('eArea').value=user.area;}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));let el=document.getElementById('n-'+id);if(el)el.classList.add('active');}
+function openEdit(){document.getElementById('editModal').classList.add('open')}
+function closeEdit(){document.getElementById('editModal').classList.remove('open')}
+function saveProfile(){user.name=document.getElementById('eName').value;user.phone=document.getElementById('ePhone').value;user.area=document.getElementById('eArea').value;localStorage.setItem('user',JSON.stringify(user));loadUser();closeEdit();alert('تم حفظ حسابك ✅');}
+function adminLogin(){let p=prompt('ادخل كود المدير:');if(p=='2024' || p=='baramoun' || p=='admin'){document.getElementById('adminPanel').style.display='block';localStorage.setItem('isAdmin','true');alert('أهلا يا مدير ✅')}else if(p!=null){alert('الكود غلط، جرب 2024')}}
+function closeAdmin(){document.getElementById('adminPanel').style.display='none';localStorage.removeItem('isAdmin')}
+function clearAll(){if(confirm('متأكد تمسح كل المنتجات؟')){localStorage.removeItem('souq');alert('تم المسح')}}
+function logout(){localStorage.removeItem('user');alert('تم تسجيل الخروج');location.reload();}
+loadUser();showView('account');
+if(localStorage.getItem('isAdmin')=='true'){document.getElementById('adminPanel').style.display='block';}
+</script>
+</body>
+</html>{name:"خيار بلدي 1 كجم مقرمش",price:18,cat:"خضار",store:"متجر الخضار الطازج",img:"https://images.unsplash.com/photo-1589621316382-008455b857cd",desc:"خيار بلدي طازج من أرض البرامون"},
 {name:"عسل البرامون 500 جم عسل طبيعي",price:80,cat:"عسل",store:"مناحل البرامون",img:"https://images.unsplash.com/photo-1587049352851-8d4e89133924",desc:"عسل طبيعي 100%"},
 {name:"جبنة قريش 500 جم محلية",price:40,cat:"ألبان",store:"ألبان البرامون",img:"https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d",desc:"جبنة قريش فلاحي"},
 {name:"طماطم طازجة 1 كجم طازجة اليوم",price:25,cat:"خضار",store:"متجر الخضار",img:"https://images.unsplash.com/photo-1592924357228-91a4daadcfea",desc:"طماطم بلدي طازجة"}
