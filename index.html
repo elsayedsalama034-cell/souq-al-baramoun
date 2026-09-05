@@ -5,68 +5,107 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سوق البرامون</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#10b981">
 <style>
-*{box-sizing:border-box;font-family:system-ui}
-body{margin:0;background:#f5f5f5 url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center/cover fixed;min-height:100vh}
-.top-banner{background:linear-gradient(90deg,#fff,#10b981);margin:12px;border-radius:20px;padding:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.1)}
-.install-btn{background:#fff;color:#10b981;border:none;padding:8px 16px;border-radius:20px;font-weight:bold;cursor:pointer}
-.header{background:#ffffffd9;backdrop-filter:blur(10px);margin:12px;border-radius:20px;padding:14px;display:flex;justify-content:space-between;align-items:center}
-.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:#ffffffee;backdrop-filter:blur(10px);border-radius:25px;display:flex;justify-content:space-around;align-items:center;padding:10px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
-.nav-item{text-align:center;font-size:12px;color:#666;text-decoration:none}
+*{box-sizing:border-box;font-family:system-ui, -apple-system}
+body{margin:0;min-height:100vh;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') center/cover fixed;padding-bottom:110px}
+.header{margin:12px;background:rgba(255,255,255,.9);backdrop-filter:blur(15px);border-radius:20px;padding:14px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.view{display:none;padding:0 12px}.view.active{display:block}
+.card{background:rgba(255,255,255,.95);border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+.search{width:100%;padding:14px;border-radius:25px;border:none;box-shadow:0 2px 10px rgba(0,0,0,.1);margin:10px 0}
+.ads-banner{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;border-radius:18px;padding:15px;display:flex;justify-content:space-between;align-items:center}
+.cats{display:flex;gap:10px;overflow-x:auto;padding:10px 0}
+.cat{background:rgba(255,255,255,.95);min-width:75px;height:75px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;border:none}
+.products{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.p-img{height:90px;background:#e0f2f1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:35px}
+.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:rgba(255,255,255,.96);backdrop-filter:blur(15px);border-radius:30px;display:flex;justify-content:space-around;align-items:center;padding:8px 10px;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:50}
+.nav-item{border:none;background:none;text-align:center;font-size:11px;color:#888;cursor:pointer;line-height:1.2}
 .nav-item.active{color:#10b981;font-weight:bold}
-.add-btn{background:linear-gradient(135deg,#10b981,#06b6d4);width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;border:none;cursor:pointer;margin-top:-20px}
-.pill{background:#fff;padding:8px 16px;border-radius:20px;font-weight:bold;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+.add-btn{background:linear-gradient(135deg,#10b981,#06b6d4);width:62px;height:62px;border-radius:50%;color:#fff;font-size:32px;border:none;margin-top:-30px;box-shadow:0 4px 15px rgba(16,185,129,.5);cursor:pointer}
+.pill{background:#fff;padding:8px 14px;border-radius:20px;font-size:13px;font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:100;padding:15px}
+.modal.open{display:flex}.modal-box{background:#fff;width:100%;max-width:400px;border-radius:22px;padding:20px}
+input,textarea,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:12px}
+.btn-main{background:#10b981;color:#fff;border:none;padding:13px;width:100%;border-radius:12px;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
 
-<div class="top-banner" id="installBanner" style="display:none">
-  <div>
-    <b>⬇️ حمّل تطبيق سوق البرامون</b><br><small>هيبقى عندك على الشاشة زي الواتساب</small>
-  </div>
-  <button class="install-btn" id="btnInstall">تثبيت</button>
-</div>
-
 <div class="header">
-  <div style="display:flex;align-items:center;gap:10px">
-    <div style="width:45px;height:45px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;display:flex;align-items:center;justify-content:center">🛒</div>
-    <div><b style="font-size:18px">سوق البرامون</b><br><small>سوق بلدنا من خير بلدنا</small></div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <div style="width:42px;height:42px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;display:flex;align-items:center;justify-content:center">🛒</div>
+    <div><b>سوق البرامون</b><br><small style="color:#666">سوق بلدنا من خير بلدنا</small></div>
   </div>
-  <div>⚙️</div>
+  <button onclick="showView('profile')" style="border:none;background:none;font-size:22px">⚙️</button>
 </div>
 
-<div style="padding:12px;display:flex;justify-content:space-between">
-  <div class="pill">0</div>
-  <div class="pill">الأكثر طلباً</div>
+<div id="home" class="view active">
+  <input class="search" placeholder="🔍 دور على أي حاجة في البرامون..." oninput="searchProd(this.value)">
+
+  <div class="ads-banner">
+    <div><b>🔥 إعلانات مميزة</b><br><small>أفضل عروض اليوم في البرامون</small></div>
+    <div style="background:#fff;color:#ef4444;padding:6px 12px;border-radius:20px;font-weight:bold">ممول</div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:15px 5px 5px">
+    <b>الفئات</b> <span class="pill" onclick="showView('cats')">عرض الكل</span>
+  </div>
+  <div class="cats">
+    <button class="cat" onclick="filterCat('خضار')">🥬<br>خضار</button>
+    <button class="cat" onclick="filterCat('أكل')">🍲<br>أكل بيتي</button>
+    <button class="cat" onclick="filterCat('ملابس')">👕<br>ملابس</button>
+    <button class="cat" onclick="filterCat('أدوات')">🔧<br>أدوات</button>
+    <button class="cat" onclick="filterCat('موبايلات')">📱<br>موبايلات</button>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:15px 5px 5px">
+    <b>الأكثر طلباً</b> <span class="pill" id="countPill">0 منتج</span>
+  </div>
+  <div id="productsList" class="products"></div>
 </div>
+
+<div id="cats" class="view">
+  <h3>كل الفئات 📦</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="card" onclick="filterCat('خضار')" style="text-align:center">🥬<br><b>خضار وفاكهة</b></div>
+    <div class="card" onclick="filterCat('أكل')" style="text-align:center">🍲<br><b>أكل بيتي</b></div>
+    <div class="card" onclick="filterCat('ملابس')" style="text-align:center">👕<br><b>ملابس</b></div>
+    <div class="card" onclick="filterCat('أدوات')" style="text-align:center">🔧<br><b>أدوات منزلية</b></div>
+  </div>
+</div>
+
+<div id="fav" class="view"><h3>المفضلة ❤️</h3><div id="favList"></div></div>
+<div id="profile" class="view"><h3>حسابي 👤</h3><div class="card"><p>تاجر في سوق البرامون</p><p><b>المنطقة:</b> البرامون - دقهلية</p><button class="btn-main">تعديل حسابي</button></div></div>
 
 <div class="bottom-nav">
-  <a class="nav-item active" href="#">🏠<br>الرئيسية</a>
-  <a class="nav-item" href="#">📦<br>الفئات</a>
-  <button class="add-btn">+</button>
-  <a class="nav-item" href="#">❤️<br>المفضلة</a>
-  <a class="nav-item" href="#">👤<br>حسابي</a>
+  <button class="nav-item active" id="n-home" onclick="showView('home')">🏠<br>الرئيسية</button>
+  <button class="nav-item" id="n-cats" onclick="showView('cats')">📦<br>الفئات</button>
+  <button class="add-btn" onclick="openAdd()">+</button>
+  <button class="nav-item" id="n-fav" onclick="showView('fav')">❤️<br>المفضلة</button>
+  <button class="nav-item" id="n-profile" onclick="showView('profile')">👤<br>حسابي</button>
 </div>
 
+<div class="modal" id="addModal"><div class="modal-box">
+  <h3>➕ أضف منتجك</h3>
+  <input id="pName" placeholder="اسم المنتج - مثال: طماطم">
+  <input id="pPrice" type="number" placeholder="السعر">
+  <select id="pCat"><option>خضار</option><option>أكل</option><option>ملابس</option><option>أدوات</option><option>موبايلات</option></select>
+  <textarea id="pDesc" placeholder="الوصف والعنوان"></textarea>
+  <button class="btn-main" onclick="saveProduct()">نشر الآن في السوق 🚀</button>
+  <button onclick="closeAdd()" style="width:100%;margin-top:10px;background:none;border:none;color:#888">إلغاء</button>
+</div></div>
+
 <script>
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e)=>{
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBanner').style.display='flex';
-});
-document.getElementById('btnInstall').addEventListener('click', async ()=>{
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    const {outcome} = await deferredPrompt.userChoice;
-    if(outcome==='accepted') document.getElementById('installBanner').style.display='none';
-    deferredPrompt=null;
-  }
-});
-if(window.matchMedia('(display-mode: standalone)').matches){
-  document.getElementById('installBanner').style.display='none';
-}
+let products = JSON.parse(localStorage.getItem('souq') || '[{"name":"طماطم بلدي","price":15,"cat":"خضار","desc":"من أرض البرامون طازة","emoji":"🍅"},{"name":"عيش فلاحي","price":10,"cat":"أكل","desc":"خبز بيتي سخن","emoji":"🍞"},{"name":"تيشيرت شبابي","price":120,"cat":"ملابس","desc":"مقاسات من البرامون","emoji":"👕"}]');
+let favs = JSON.parse(localStorage.getItem('fav')||'[]');
+function render(list=products){let h='';list.forEach((p,i)=>{h+=`<div class="card"><div class="p-img">${p.emoji||'🛒'}</div><b>${p.name}</b><br><small style="color:#10b981;font-weight:bold">${p.price} جنيه</small><br><small style="color:#666">${p.cat}</small><br><button onclick="addFav(${products.indexOf(p)})" style="width:100%;margin-top:8px;border:1px solid #10b981;background:#fff;color:#10b981;border-radius:10px;padding:6px">❤️ حفظ</button></div>`});document.getElementById('productsList').innerHTML=h;document.getElementById('countPill').innerText=list.length+' منتج';renderFav();}
+function renderFav(){document.getElementById('favList').innerHTML = favs.length? favs.map(f=>`<div class="card">❤️ ${f.name} - ${f.price}ج</div>`).join('') : '<div class="card">لسه مفيش حاجة في المفضلة</div>'}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));let el=document.getElementById('n-'+id);if(el)el.classList.add('active');if(id=='home')render();}
+function openAdd(){document.getElementById('addModal').classList.add('open')} function closeAdd(){document.getElementById('addModal').classList.remove('open')}
+function saveProduct(){let p={name:pName.value,price:pPrice.value,cat:pCat.value,desc:pDesc.value,emoji:'🛒'};if(!p.name||!p.price)return alert('اكتب الاسم والسعر');products.unshift(p);localStorage.setItem('souq',JSON.stringify(products));closeAdd();render();showView('home');}
+function addFav(i){favs.push(products[i]);localStorage.setItem('fav',JSON.stringify(favs));renderFav();alert('تم الحفظ ❤️')}
+function filterCat(c){showView('home');render(products.filter(p=>p.cat==c));}
+function searchProd(q){render(products.filter(p=>p.name.includes(q)||p.cat.includes(q)));}
+render();
 </script>
 </body>
 </html>
