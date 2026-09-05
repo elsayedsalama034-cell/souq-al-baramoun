@@ -1,49 +1,18 @@
-<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<style>body{margin:0;display:flex;justify-content:center;align-items:center;height:100vh;background:#00b894;color:#fff;font-family:sans-serif;flex-direction:column} .loader{width:50px;height:50px;border:5px solid #fff;border-top:5px solid transparent;border-radius:50%;animation:spin 1s linear infinite} @keyframes spin{to{transform:rotate(360deg)}}</style>
-</head><body><div class="loader"></div><h2>سوق البرامون</h2><p>جاري التحميل...</p>
-<script>window.location.href="https://dazzling-neo-lithic-edit.base44.app"</script></body></html>if(file){
-let r=new FileReader();
-r.onload=e=>{obj.img=e.target.result;ads.push(obj);save();afterAdd();};
-r.readAsDataURL(file);
-}else{ads.push(obj);save();afterAdd();}
-}
-function afterAdd(){
-document.getElementById('title').value="";document.getElementById('price').value="";document.getElementById('desc').value="";document.getElementById('phone').value="";document.getElementById('img').value="";
-render();alert('✅ تم نشر إعلانك في سوق البرامون - هيظهر للناس دلوقتي');
-}
-function del(i){if(confirm('تحذف الإعلان ده؟')){ads.splice(i,1);save();render();}}
-function render(){
-let q=document.getElementById('search').value.toLowerCase();
-let filtered=ads.filter(a=>{
-let catOk=cur==="الكل"||a.cat===cur;
-let searchOk=!q||(a.title+a.desc+a.cat).toLowerCase().includes(q);
-return catOk&&searchOk;
-});
-let html=`<div style="display:flex;justify-content:space-between;align-items:center"><b>📢 ${filtered.length} إعلان</b><small style="color:#888">${cur}</small></div>`;
-if(filtered.length===0)html+=`<p style="text-align:center;color:#888;padding:20px">لا يوجد إعلانات في القسم ده<br>كن أول من ينشر 🚀</p>`;
-[...filtered].reverse().forEach(a=>{
-let realIdx=ads.indexOf(a);
-let imgSrc=a.img||`https://via.placeholder.com/200x200/2e7d32/ffffff?text=${encodeURIComponent(a.cat.split(" ")[0])}`;
-html+=`<div class="ad">
-<img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/85?text=🐟'">
-<div class="ad-body">
-<div class="badge">${a.cat}</div>
-<div class="ad-title">${a.title}</div>
-<div class="ad-price">${a.price||'السعر عند الاتصال'}</div>
-<div class="ad-desc">${a.desc}</div>
-<div class="ad-meta">📞 ${a.phone} • 🕒 ${a.time}</div>
-<div class="actions">
-<a class="act call" href="tel:${a.phone}">📞 اتصال</a>
-<a class="act wa" href="https://wa.me/2${a.phone.replace(/^0/,'')}" target="_blank">💬 واتساب</a>
-<button class="act del" onclick="del(${realIdx})">🗑️</button>
-</div>
-</div>
-</div>`;
-});
-document.getElementById('list').innerHTML=html;
-}
-buildTabs();render();
-</script>
-</body>
-  </html>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>سوق البرامون - سيرفر حقيقي</title><style>*{font-family:tahoma;box-sizing:border-box;margin:0}body{background:#f5f7f9}.h{background:#00cec9;padding:14px;color:#fff;text-align:center;font-weight:800;font-size:20px}.card{background:#fff;margin:10px;padding:12px;border-radius:16px;box-shadow:0 2px 8px #0001}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}.ad{background:#fff;border-radius:16px;overflow:hidden}.ad img{width:100%;height:130px;object-fit:cover}input{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;margin:6px 0}</style></head><body>
+<div class="h">سوق البرامون - على سيرفر حقيقي 🟢</div>
+<div class="card"><h3>انشر إعلانك - هيظهر لكل الناس فوراً</h3><input id="t" placeholder="مثال: شقة للبيع 140م"><input id="p" placeholder="السعر: 950,000 ج.م"><input id="ph" placeholder="رقمك: 010xxxx"><button onclick="pub()" style="width:100%;padding:14px;background:#00b894;color:#fff;border:0;border-radius:12px;font-weight:800">نشر على السيرفر 🚀</button></div>
+<div id="list" class="grid"></div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import {getDatabase,ref,push,onValue} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "حط_هنا_apiKey",
+  authDomain: "حط_هنا",
+  databaseURL: "https://souq-albaramoon-default-rtdb.firebaseio.com",
+  projectId: "souq-albaramoon",
+  appId: "حط_هنا"
+};
+const app=initializeApp(firebaseConfig);const db=getDatabase(app);const r=ref(db,'ads');
+window.pub=()=>{let t=document.getElementById('t').value,p=document.getElementById('p').value,ph=document.getElementById('ph').value;if(!t)return alert('اكتب الإعلان');push(r,{title:t,price:p,phone:ph,time:Date.now()});alert('اتنشر! كل الناس هتشوفه');document.getElementById('t').value='';};
+onValue(r,s=>{let d=s.val();let h='';if(!d)return;Object.values(d).reverse().forEach(a=>{h+=`<div class="ad"><div style="padding:8px"><b>${a.title}</b><br><span style="color:green">${a.price}</span><br><small>${a.phone}</small></div></div>`});document.getElementById('list').innerHTML=h;});
+</script></body></html>
