@@ -1,5 +1,7 @@
 name: Build APK
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,8 +18,8 @@ jobs:
       - run: npx cap init "Souq" com.baramoon.souq --web-dir=.
       - run: npx cap add android
       - run: npx cap copy
-      - run: cd android && chmod +x gradlew &&./gradlew assembleDebug
+      - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: APK
+          name: souq-albaramoon-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
