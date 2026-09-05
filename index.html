@@ -1,72 +1,72 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سوق البرامون</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#10b981">
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@900&display=swap" rel="stylesheet">
-<style>*{font-family:'Tajawal',sans-serif}.glass{background:rgba(255,255,255,.75);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.5)}.img-contain{object-fit:contain;width:100%;height:100%;background:#fff}.bg-village{background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200');background-size:cover;background-attachment:fixed}</style>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import{getDatabase,ref,push,onValue,remove,update}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-const cfg={apiKey:"AIzaSyCSRaSsNHeX5-Qu3u778i2Kg3B85n_-R_E",authDomain:"souq-albaramoun.firebaseapp.com",databaseURL:"https://souq-albaramoun-default-rtdb.firebaseio.com",projectId:"souq-albaramoun",storageBucket:"souq-albaramoun.firebasestorage.app",messagingSenderId:"945410764474",appId:"1:945410764474:web:d54d4b5b52d4e090c75c83"};
-const app=initializeApp(cfg);const db=getDatabase(app);
-const adsRef=ref(db,'ads');const catsRef=ref(db,'categories');
-let isAdmin=localStorage.getItem('admin')==='elsayed2026';let products=[];let cats=[];let filterCat='الكل';let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!window.matchMedia('(display-mode: standalone)').matches)document.getElementById('installBtn').classList.remove('hidden')});
-window.installApp=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('installBtn').classList.add('hidden')}};
-window.adminLogin=()=>{let p=prompt('كلمة سر المدير:');if(p==='elsayed2026'){localStorage.setItem('admin','elsayed2026');isAdmin=true;location.reload()}else alert('غلط')};
-window.secretTap=()=>{let c=(window.cc||0)+1;window.cc=c;if(c>=5)window.adminLogin()};
-window.deleteProd=(k)=>{if(!isAdmin)return;if(confirm('حذف؟'))remove(ref(db,'ads/'+k))};
-window.toggleFeatured=(k,v)=>{if(!isAdmin)return;update(ref(db,'ads/'+k),{featured:!v})};
-window.addProduct=()=>{const t=document.getElementById('pTitle').value,p=document.getElementById('pPrice').value,ph=document.getElementById('pShop').value,cat=document.getElementById('pCat').value,img=document.getElementById('pImgPrev').src;if(!t||!p){alert('كمل البيانات');return}push(adsRef,{title:t,price:p,shop:ph||'متجر البرامون',category:cat,img:img.startsWith('data:')?img:'',featured:false,time:Date.now()});document.getElementById('addModal').classList.add('hidden');alert('تم ✅')};
-window.openAdd=()=>document.getElementById('addModal').classList.remove('hidden');
-window.previewImg=(i)=>{if(i.files[0]){let r=new FileReader();r.onload=e=>{let im=document.getElementById('pImgPrev');im.src=e.target.result;im.classList.remove('hidden');document.getElementById('pImgTxt').classList.add('hidden')};r.readAsDataURL(i.files[0])}};
-onValue(adsRef,s=>{let d=s.val();products=d?Object.entries(d).map(([k,v])=>({k,...v})) :[];render()});
-onValue(catsRef,s=>{cats=s.val()?Object.values(s.val()):['سوبر ماركت','ملابس','خضار وفواكه','أدوات منزلية'];renderCats()});
-window.render=()=>{let list=document.getElementById('list');let feat=document.getElementById('featured');if(!list)return;list.innerHTML='';feat.innerHTML='';let filtered=products.filter(p=>filterCat==='الكل'||p.category===filterCat);let f=filtered.find(p=>p.featured)||filtered[0];if(f)feat.innerHTML=`<div class="glass rounded-[22px] p-3 flex gap-3"><img src="${f.img||'https://via.placeholder.com/100'}" class="w-24 h-24 rounded-xl img-contain"><div><span class="bg-green-500 text-white text-[10px] px-2 py-1 rounded-full">مميز ⭐</span><h3 class="font-bold">${f.title}</h3><p class="text-emerald-700 font-black">${f.price} ج.م</p></div></div>`;filtered.slice(0,20).forEach(p=>{list.innerHTML+=`<div class="glass rounded-[20px] overflow-hidden"><div class="h-28 bg-white"><img src="${p.img||'https://via.placeholder.com/200'}" class="img-contain"></div><div class="p-3"><h4 class="font-bold text-[13px]">${p.title}</h4><p class="text-[11px] text-gray-600">${p.shop}</p><div class="flex justify-between mt-2"><span class="text-emerald-700 font-black">${p.price} ج</span><button onclick="deleteProd('${p.k}')" class="text-xs">${isAdmin?'🗑️':''}</button></div>${isAdmin?`<button onclick="toggleFeatured('${p.k}',${p.featured})" class="w-full mt-2 text-[11px] ${p.featured?'bg-amber-500':'bg-gray-300'} text-white py-1 rounded-full">${p.featured?'إلغاء تمييز':'تمييز'}</button>`:''}</div></div>`});document.getElementById('count').innerText=filtered.length+' منتج'};
-window.renderCats=()=>{let cBox=document.getElementById('cats');if(!cBox)return;cBox.innerHTML=`<button onclick="filterCat='الكل';render()" class="glass px-4 py-2 rounded-full">الكل</button>`;cats.forEach(c=>{cBox.innerHTML+=`<button onclick="filterCat='${c}';render()" class="glass px-4 py-2 rounded-full text-sm">${c}</button>`});let sel=document.getElementById('pCat');if(sel)sel.innerHTML=cats.map(c=>`<option>${c}</option>`).join('')};
-window.addCat=()=>{let n=prompt('اسم الفئة:');if(n){push(catsRef,n)}};
-if('serviceWorker' in navigator){navigator.serviceWorker.register('data:text/javascript;base64,'+btoa('self.addEventListener("fetch",e=>{})'))}
-</script>
+<style>
+*{box-sizing:border-box;font-family:system-ui}
+body{margin:0;background:#f5f5f5 url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center/cover fixed;min-height:100vh}
+.top-banner{background:linear-gradient(90deg,#fff,#10b981);margin:12px;border-radius:20px;padding:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+.install-btn{background:#fff;color:#10b981;border:none;padding:8px 16px;border-radius:20px;font-weight:bold;cursor:pointer}
+.header{background:#ffffffd9;backdrop-filter:blur(10px);margin:12px;border-radius:20px;padding:14px;display:flex;justify-content:space-between;align-items:center}
+.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:#ffffffee;backdrop-filter:blur(10px);border-radius:25px;display:flex;justify-content:space-around;align-items:center;padding:10px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.nav-item{text-align:center;font-size:12px;color:#666;text-decoration:none}
+.nav-item.active{color:#10b981;font-weight:bold}
+.add-btn{background:linear-gradient(135deg,#10b981,#06b6d4);width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;border:none;cursor:pointer;margin-top:-20px}
+.pill{background:#fff;padding:8px 16px;border-radius:20px;font-weight:bold;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+</style>
 </head>
-<body class="bg-village min-h-screen">
-<div class="max-w-[420px] mx-auto min-h-screen flex flex-col relative">
-<!-- زرار التحميل الذكي - يظهر بس للي بره التطبيق -->
-<div id="installBtn" class="hidden mx-3 mt-3 glass bg-gradient-to-l from-green-500 to-blue-500!text-white rounded-[16px] p-3 flex justify-between items-center">
-<div><p class="font-black text-sm">⬇️ حمّل تطبيق سوق البرامون</p><p class="text-[11px]">هيبقى عندك على الشاشة زي الواتساب</p></div>
-<button onclick="installApp()" class="bg-white text-green-600 px-4 py-2 rounded-full font-black text-sm">تثبيت</button>
+<body>
+
+<div class="top-banner" id="installBanner" style="display:none">
+  <div>
+    <b>⬇️ حمّل تطبيق سوق البرامون</b><br><small>هيبقى عندك على الشاشة زي الواتساب</small>
+  </div>
+  <button class="install-btn" id="btnInstall">تثبيت</button>
 </div>
 
-<div class="glass m-3 rounded-[22px] p-4 flex justify-between items-center">
-<div onclick="secretTap()" class="flex gap-3 items-center"><div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center text-white text-xl">🛒</div><div><h1 class="font-black text-xl text-[#0a3d62]">سوق البرامون</h1><p class="text-[11px] font-bold">سوق بلدنا من خير بلدنا</p></div></div>
-<button onclick="isAdmin?addCat():adminLogin()" class="w-9 h-9 glass rounded-full">⚙️</button>
+<div class="header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:45px;height:45px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;display:flex;align-items:center;justify-content:center">🛒</div>
+    <div><b style="font-size:18px">سوق البرامون</b><br><small>سوق بلدنا من خير بلدنا</small></div>
+  </div>
+  <div>⚙️</div>
 </div>
-<div id="featured" class="mx-3"></div>
-<div class="mx-3 mt-4 flex justify-between"><h2 class="glass px-4 py-2 rounded-full font-bold text-sm">الأكثر طلباً</h2><span id="count" class="text-xs glass px-3 py-1 rounded-full">0</span></div>
-<div id="cats" class="mx-3 mt-3 flex gap-2 overflow-x-auto"></div>
-<div id="list" class="mx-3 mt-3 grid grid-cols-2 gap-3 pb-24"></div>
-<div class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[95%] max-w-[400px] glass rounded-[22px] flex justify-around p-2">
-<button class="flex flex-col items-center text-emerald-700"><span>🏠</span><span class="text-[10px]">الرئيسية</span></button>
-<button onclick="addCat()" class="flex flex-col items-center"><span>📦</span><span class="text-[10px]">الفئات</span></button>
-<button onclick="openAdd()" class="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-blue-500 text-white text-3xl flex items-center justify-center">+</button>
-<button class="flex flex-col items-center"><span>❤️</span><span class="text-[10px]">المفضلة</span></button>
-<button onclick="adminLogin()" class="flex flex-col items-center"><span>👤</span><span class="text-[10px]">${isAdmin?'أدمن':'حسابي'}</span></button>
+
+<div style="padding:12px;display:flex;justify-content:space-between">
+  <div class="pill">0</div>
+  <div class="pill">الأكثر طلباً</div>
 </div>
-<div id="addModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur flex items-end justify-center z-50">
-<div class="glass w-full max-w-[420px] rounded-t-[28px] p-5">
-<div class="text-center font-black mb-3">إضافة منتج جديد</div>
-<label class="block border-2 border-dashed rounded-xl p-4 text-center bg-white/50"><img id="pImgPrev" class="mx-auto w-32 h-32 img-contain hidden"><span id="pImgTxt">📷 اختر الصورة - هتظهر كاملة بدون قص</span><input type="file" accept="image/*" onchange="previewImg(this)" class="hidden"></label>
-<input id="pTitle" placeholder="اسم المنتج" class="w-full mt-3 p-3 rounded-xl border">
-<input id="pPrice" type="number" placeholder="السعر" class="w-full mt-2 p-3 rounded-xl border">
-<select id="pCat" class="w-full mt-2 p-3 rounded-xl border"></select>
-<input id="pShop" placeholder="اسم المتجر" class="w-full mt-2 p-3 rounded-xl border">
-<button onclick="addProduct()" class="w-full mt-4 bg-gradient-to-l from-blue-500 to-green-400 text-white py-3 rounded-xl font-black">حفظ ✅</button>
-<button onclick="document.getElementById('addModal').classList.add('hidden')" class="w-full mt-2 text-sm">إلغاء</button>
+
+<div class="bottom-nav">
+  <a class="nav-item active" href="#">🏠<br>الرئيسية</a>
+  <a class="nav-item" href="#">📦<br>الفئات</a>
+  <button class="add-btn">+</button>
+  <a class="nav-item" href="#">❤️<br>المفضلة</a>
+  <a class="nav-item" href="#">👤<br>حسابي</a>
 </div>
-</div>
-</div>
+
+<script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display='flex';
+});
+document.getElementById('btnInstall').addEventListener('click', async ()=>{
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const {outcome} = await deferredPrompt.userChoice;
+    if(outcome==='accepted') document.getElementById('installBanner').style.display='none';
+    deferredPrompt=null;
+  }
+});
+if(window.matchMedia('(display-mode: standalone)').matches){
+  document.getElementById('installBanner').style.display='none';
+}
+</script>
 </body>
 </html>
