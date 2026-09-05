@@ -1,0 +1,6 @@
+{
+  "appId": "com.baramoon.souq",
+  "appName": "سوق البرامون",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}
