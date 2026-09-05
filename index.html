@@ -1,99 +1,91 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سوق البرامون</title>
 <style>
-*{box-sizing:border-box;font-family:system-ui}body{margin:0;min-height:100vh;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') center/cover fixed;padding-bottom:110px}
-.glass{background:rgba(255,255,255,.92);backdrop-filter:blur(15px);border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+*{box-sizing:border-box;font-family:system-ui}body{margin:0;min-height:100vh;background:#f0f4f8;padding-bottom:110px}
+.glass{background:#fff;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,.1)}
 .header{margin:12px;padding:14px;display:flex;justify-content:space-between;align-items:center}
 .view{display:none;padding:12px}.view.active{display:block}
-.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:rgba(255,255,255,.96);border-radius:30px;display:flex;justify-content:space-around;align-items:center;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:50}
+.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:#fff;border-radius:30px;display:flex;justify-content:space-around;align-items:center;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:50}
 .nav-item{border:none;background:none;font-size:11px;color:#888}.nav-item.active{color:#10b981;font-weight:bold}
-.add-btn{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;font-size:32px;border:none;margin-top:-25px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:200;padding:15px}
-.modal.open{display:flex}.modal-box{background:#fff;width:100%;max-width:380px;border-radius:20px;padding:20px}
-input{width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:12px}
-.btn-main{background:#10b981;color:#fff;border:none;padding:13px;width:100%;border-radius:12px;font-weight:bold;cursor:pointer}
+.add-btn{width:62px;height:62px;border-radius:50%;background:#10b981;color:#fff;font-size:32px;border:none;margin-top:-25px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:200}
+.modal.open{display:flex}.modal-box{background:#fff;width:90%;max-width:360px;border-radius:20px;padding:20px}
+input{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:12px}
+.btn-main{background:#10b981;color:#fff;border:none;padding:12px;width:100%;border-radius:12px;font-weight:bold}
 </style>
 </head>
 <body>
-
 <div class="header glass">
-<div style="display:flex;gap:10px;align-items:center"><div style="width:42px;height:42px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;display:flex;align-items:center;justify-content:center">🛒</div><div><b>سوق البرامون</b><br><small>سوق بلدنا من خير بلدنا</small></div></div>
-<div style="display:flex;gap:10px"><button onclick="adminLogin()" style="border:none;background:#fff3cd;padding:6px 10px;border-radius:10px;font-size:12px">🔐 مدير</button><button onclick="showView('account')" style="border:none;background:none;font-size:22px">⚙️</button></div>
+<div><b>سوق البرامون 🛒</b><br><small>سوق بلدنا من خير بلدنا</small></div>
+<button onclick="adminLogin()" style="border:none;background:#fef3c7;padding:6px 10px;border-radius:10px">مدير</button>
 </div>
 
-<div id="home" class="view active"><div class="glass" style="padding:30px;text-align:center">أهلا بيك في سوق البرامون<br>المنتجات هتظهر هنا</div></div>
-<div id="cats" class="view"><div class="glass" style="padding:20px">الفئات</div></div>
+<div id="home" class="view active"><div class="glass" style="padding:20px;text-align:center">أهلاً بيك في سوق البرامون<br><br><div id="list"></div></div></div>
+<div id="account" class="view"><div class="glass" style="padding:20px">
+<h3>حسابي 👤</h3>
+<p>الاسم: <span id="uName">ضيف</span></p>
+<p>الهاتف: <span id="uPhone">01000000000</span></p>
+<p>المنطقة: <span id="uArea">البرامون</span></p>
+<button class="btn-main" onclick="openEdit()">تعديل حسابي</button>
+<button onclick="adminLogin()" style="width:100%;margin-top:10px;padding:10px;border:1px solid #f59e0b;background:#fffbeb;border-radius:10px">الدخول كمدير - كود 2024</button>
+<div id="adminPanel" style="display:none;margin-top:10px;background:#fee;padding:10px;border-radius:10px">وضع المدير شغال ✅<br><button onclick="closeAdmin()" style="margin-top:8px;width:100%">خروج من وضع المدير</button></div>
+</div></div>
+<div id="cats" class="view"><div class="glass" style="padding:20px">الفئات قريباً</div></div>
 <div id="fav" class="view"><div class="glass" style="padding:20px">المفضلة</div></div>
 
-<!-- حسابي - شغال 100% -->
-<div id="account" class="view active">
-<h3 style="text-align:right">👤 حسابي</h3>
-<div class="glass" style="padding:20px">
-<p>تاجر في سوق البرامون</p>
-<p><b>الاسم:</b> <span id="uName">ضيف البرامون</span></p>
-<p><b>الهاتف:</b> <span id="uPhone">01000000000</span></p>
-<p><b>المنطقة:</b> <span id="uArea">البرامون - دقهلية</span></p>
-<button class="btn-main" onclick="openEdit()">تعديل حسابي</button>
-<div style="margin-top:12px;display:flex;gap:8px">
-<button onclick="adminLogin()" style="flex:1;padding:10px;border:1px solid #f59e0b;background:#fffbeb;border-radius:10px">🔐 الدخول كـ مدير</button>
-<button onclick="logout()" style="flex:1;padding:10px;border:1px solid #ddd;background:#fff;border-radius:10px">تسجيل خروج</button>
-</div>
-<div id="adminPanel" style="display:none;margin-top:15px;background:#fef2f2;padding:12px;border-radius:12px;border:1px solid #fecaca">
-<b>🛡️ لوحة تحكم المدير</b><br><small>انت الآن مدير</small><br>
-<button class="btn-main" style="background:#ef4444;margin-top:8px" onclick="clearAll()">مسح كل المنتجات</button>
-<button class="btn-main" style="background:#6b7280;margin-top:8px" onclick="closeAdmin()">خروج من وضع المدير</button>
-</div>
-</div>
-</div>
-
 <div class="bottom-nav">
-<button class="nav-item" id="n-home" onclick="showView('home')">🏠<br>الرئيسية</button>
-<button class="nav-item" id="n-cats" onclick="showView('cats')">📦<br>الفئات</button>
+<button class="nav-item active" id="n-home" onclick="showView('home')">الرئيسية</button>
+<button class="nav-item" id="n-cats" onclick="showView('cats')">الفئات</button>
 <button class="add-btn" onclick="alert('اضافة منتج')">+</button>
-<button class="nav-item" id="n-fav" onclick="showView('fav')">❤️<br>المفضلة</button>
-<button class="nav-item active" id="n-account" onclick="showView('account')">👤<br>حسابي</button>
+<button class="nav-item" id="n-fav" onclick="showView('fav')">المفضلة</button>
+<button class="nav-item" id="n-account" onclick="showView('account')">حسابي</button>
 </div>
 
-<!-- مودال تعديل الحساب -->
 <div class="modal" id="editModal"><div class="modal-box">
-<h3>تعديل حسابي ✏️</h3>
-<input id="eName" placeholder="اسمك">
-<input id="ePhone" placeholder="رقم التليفون">
-<input id="eArea" placeholder="المنطقة - مثال: البرامون">
-<button class="btn-main" onclick="saveProfile()">حفظ التعديلات ✅</button>
-<button onclick="closeEdit()" style="width:100%;margin-top:10px;background:none;border:none;color:#888">إلغاء</button>
+<h3>تعديل حسابي</h3>
+<input id="eName" placeholder="الاسم">
+<input id="ePhone" placeholder="الهاتف">
+<input id="eArea" placeholder="المنطقة">
+<button class="btn-main" onclick="saveProfile()">حفظ</button>
+<button onclick="closeEdit()" style="width:100%;margin-top:8px;background:none;border:none">إلغاء</button>
 </div></div>
 
 <script>
-let user = JSON.parse(localStorage.getItem('user') || '{"name":"ضيف البرامون","phone":"01000000000","area":"البرامون - دقهلية"}');
-function loadUser(){document.getElementById('uName').innerText=user.name;document.getElementById('uPhone').innerText=user.phone;document.getElementById('uArea').innerText=user.area;document.getElementById('eName').value=user.name;document.getElementById('ePhone').value=user.phone;document.getElementById('eArea').value=user.area;}
-function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));let el=document.getElementById('n-'+id);if(el)el.classList.add('active');}
-function openEdit(){document.getElementById('editModal').classList.add('open')}
-function closeEdit(){document.getElementById('editModal').classList.remove('open')}
-function saveProfile(){user.name=document.getElementById('eName').value;user.phone=document.getElementById('ePhone').value;user.area=document.getElementById('eArea').value;localStorage.setItem('user',JSON.stringify(user));loadUser();closeEdit();alert('تم حفظ حسابك ✅');}
-function adminLogin(){let p=prompt('ادخل كود المدير:');if(p=='2024' || p=='baramoun' || p=='admin'){document.getElementById('adminPanel').style.display='block';localStorage.setItem('isAdmin','true');alert('أهلا يا مدير ✅')}else if(p!=null){alert('الكود غلط، جرب 2024')}}
-function closeAdmin(){document.getElementById('adminPanel').style.display='none';localStorage.removeItem('isAdmin')}
-function clearAll(){if(confirm('متأكد تمسح كل المنتجات؟')){localStorage.removeItem('souq');alert('تم المسح')}}
-function logout(){localStorage.removeItem('user');alert('تم تسجيل الخروج');location.reload();}
-loadUser();showView('account');
-if(localStorage.getItem('isAdmin')=='true'){document.getElementById('adminPanel').style.display='block';}
-</script>
-</body>
-</html>{name:"خيار بلدي 1 كجم مقرمش",price:18,cat:"خضار",store:"متجر الخضار الطازج",img:"https://images.unsplash.com/photo-1589621316382-008455b857cd",desc:"خيار بلدي طازج من أرض البرامون"},
-{name:"عسل البرامون 500 جم عسل طبيعي",price:80,cat:"عسل",store:"مناحل البرامون",img:"https://images.unsplash.com/photo-1587049352851-8d4e89133924",desc:"عسل طبيعي 100%"},
-{name:"جبنة قريش 500 جم محلية",price:40,cat:"ألبان",store:"ألبان البرامون",img:"https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d",desc:"جبنة قريش فلاحي"},
-{name:"طماطم طازجة 1 كجم طازجة اليوم",price:25,cat:"خضار",store:"متجر الخضار",img:"https://images.unsplash.com/photo-1592924357228-91a4daadcfea",desc:"طماطم بلدي طازجة"}
-];
-let favs=[];
-function renderOffers(list=products){let h='';list.forEach((p,i)=>{h+=`<div class="offer-card glass" onclick="openProduct(${products.indexOf(p)})"><div class="offer-img"><img src="${p.img}"></div><div class="offer-info"><b style="font-size:13px">${p.name}</b><br><small>${p.store}</small><br><span class="price">${p.price} جنيه</span><button class="btn-plus">+</button></div></div>`});document.getElementById('offers').innerHTML=h;document.getElementById('merchantProducts').innerHTML=h;}
-function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));let e=document.getElementById('n-'+id);if(e)e.classList.add('active');if(id=='home')renderOffers();}
-function openProduct(i){let p=products[i];document.getElementById('dMainImg').src=p.img;document.getElementById('dName').innerText=p.name;document.getElementById('dPrice').innerText=p.price+' ج.م';document.getElementById('dStore').innerText=p.store;document.getElementById('dDesc').innerText=p.desc;let th='';for(let k=0;k<6;k++){th+=`<div class="${k==0?'active':''}" onclick="document.getElementById('dMainImg').src='${p.img}'"><img src="${p.img}" style="width:100%;height:100%;object-fit:contain"></div>`}document.getElementById('thumbs').innerHTML=th;showView('product');}
-function filterCat(c){renderOffers(products.filter(p=>p.cat.includes(c)||c.includes(p.cat)));showView('home');}
-function searchProd(q){renderOffers(products.filter(p=>p.name.includes(q)));}
-renderOffers();
+var user = JSON.parse(localStorage.getItem('user') || '{"name":"ضيف البرامون","phone":"01000000000","area":"البرامون"}');
+function loadUser(){
+document.getElementById('uName').innerText=user.name;
+document.getElementById('uPhone').innerText=user.phone;
+document.getElementById('uArea').innerText=user.area;
+document.getElementById('eName').value=user.name;
+document.getElementById('ePhone').value=user.phone;
+document.getElementById('eArea').value=user.area;
+document.getElementById('list').innerHTML = 'مرحبا يا ' + user.name + ' - منتجات البرامون جاهزة';
+}
+function showView(id){
+var all=document.querySelectorAll('.view');
+for(var i=0;i<all.length;i++){all[i].classList.remove('active');}
+document.getElementById(id).classList.add('active');
+}
+function openEdit(){document.getElementById('editModal').classList.add('open');}
+function closeEdit(){document.getElementById('editModal').classList.remove('open');}
+function saveProfile(){
+user.name=document.getElementById('eName').value;
+user.phone=document.getElementById('ePhone').value;
+user.area=document.getElementById('eArea').value;
+localStorage.setItem('user',JSON.stringify(user));
+loadUser();closeEdit();alert('تم الحفظ');
+}
+function adminLogin(){
+var p=prompt('كود المدير:');
+if(p=='2024'){document.getElementById('adminPanel').style.display='block';alert('اهلا يا مدير');}
+else if(p!=null){alert('الكود هو 2024');}
+}
+function closeAdmin(){document.getElementById('adminPanel').style.display='none';}
+loadUser();
 </script>
 </body>
 </html>
