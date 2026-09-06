@@ -1,91 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سوق البرامون</title>
-<style>
-*{box-sizing:border-box;font-family:system-ui}body{margin:0;min-height:100vh;background:#f0f4f8;padding-bottom:110px}
-.glass{background:#fff;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,.1)}
-.header{margin:12px;padding:14px;display:flex;justify-content:space-between;align-items:center}
-.view{display:none;padding:12px}.view.active{display:block}
-.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;background:#fff;border-radius:30px;display:flex;justify-content:space-around;align-items:center;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:50}
-.nav-item{border:none;background:none;font-size:11px;color:#888}.nav-item.active{color:#10b981;font-weight:bold}
-.add-btn{width:62px;height:62px;border-radius:50%;background:#10b981;color:#fff;font-size:32px;border:none;margin-top:-25px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:200}
-.modal.open{display:flex}.modal-box{background:#fff;width:90%;max-width:360px;border-radius:20px;padding:20px}
-input{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:12px}
-.btn-main{background:#10b981;color:#fff;border:none;padding:12px;width:100%;border-radius:12px;font-weight:bold}
-</style>
-</head>
-<body>
-<div class="header glass">
-<div><b>سوق البرامون 🛒</b><br><small>سوق بلدنا من خير بلدنا</small></div>
-<button onclick="adminLogin()" style="border:none;background:#fef3c7;padding:6px 10px;border-radius:10px">مدير</button>
-</div>
-
-<div id="home" class="view active"><div class="glass" style="padding:20px;text-align:center">أهلاً بيك في سوق البرامون<br><br><div id="list"></div></div></div>
-<div id="account" class="view"><div class="glass" style="padding:20px">
-<h3>حسابي 👤</h3>
-<p>الاسم: <span id="uName">ضيف</span></p>
-<p>الهاتف: <span id="uPhone">01000000000</span></p>
-<p>المنطقة: <span id="uArea">البرامون</span></p>
-<button class="btn-main" onclick="openEdit()">تعديل حسابي</button>
-<button onclick="adminLogin()" style="width:100%;margin-top:10px;padding:10px;border:1px solid #f59e0b;background:#fffbeb;border-radius:10px">الدخول كمدير - كود 2024</button>
-<div id="adminPanel" style="display:none;margin-top:10px;background:#fee;padding:10px;border-radius:10px">وضع المدير شغال ✅<br><button onclick="closeAdmin()" style="margin-top:8px;width:100%">خروج من وضع المدير</button></div>
-</div></div>
-<div id="cats" class="view"><div class="glass" style="padding:20px">الفئات قريباً</div></div>
-<div id="fav" class="view"><div class="glass" style="padding:20px">المفضلة</div></div>
-
-<div class="bottom-nav">
-<button class="nav-item active" id="n-home" onclick="showView('home')">الرئيسية</button>
-<button class="nav-item" id="n-cats" onclick="showView('cats')">الفئات</button>
-<button class="add-btn" onclick="alert('اضافة منتج')">+</button>
-<button class="nav-item" id="n-fav" onclick="showView('fav')">المفضلة</button>
-<button class="nav-item" id="n-account" onclick="showView('account')">حسابي</button>
-</div>
-
-<div class="modal" id="editModal"><div class="modal-box">
-<h3>تعديل حسابي</h3>
-<input id="eName" placeholder="الاسم">
-<input id="ePhone" placeholder="الهاتف">
-<input id="eArea" placeholder="المنطقة">
-<button class="btn-main" onclick="saveProfile()">حفظ</button>
-<button onclick="closeEdit()" style="width:100%;margin-top:8px;background:none;border:none">إلغاء</button>
-</div></div>
-
-<script>
-var user = JSON.parse(localStorage.getItem('user') || '{"name":"ضيف البرامون","phone":"01000000000","area":"البرامون"}');
-function loadUser(){
-document.getElementById('uName').innerText=user.name;
-document.getElementById('uPhone').innerText=user.phone;
-document.getElementById('uArea').innerText=user.area;
-document.getElementById('eName').value=user.name;
-document.getElementById('ePhone').value=user.phone;
-document.getElementById('eArea').value=user.area;
-document.getElementById('list').innerHTML = 'مرحبا يا ' + user.name + ' - منتجات البرامون جاهزة';
-}
-function showView(id){
-var all=document.querySelectorAll('.view');
-for(var i=0;i<all.length;i++){all[i].classList.remove('active');}
-document.getElementById(id).classList.add('active');
-}
-function openEdit(){document.getElementById('editModal').classList.add('open');}
-function closeEdit(){document.getElementById('editModal').classList.remove('open');}
-function saveProfile(){
-user.name=document.getElementById('eName').value;
-user.phone=document.getElementById('ePhone').value;
-user.area=document.getElementById('eArea').value;
-localStorage.setItem('user',JSON.stringify(user));
-loadUser();closeEdit();alert('تم الحفظ');
-}
-function adminLogin(){
-var p=prompt('كود المدير:');
-if(p=='2024'){document.getElementById('adminPanel').style.display='block';alert('اهلا يا مدير');}
-else if(p!=null){alert('الكود هو 2024');}
-}
-function closeAdmin(){document.getElementById('adminPanel').style.display='none';}
-loadUser();
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="description" content="سوق البرامون — سوق بلدنا للإعلانات والبيع والشراء والخدمات" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <title>سوق البرامون</title>
+    <script>
+      // فتح index.html من مدير الملفات مباشرة لا يشغّل React/Vite؛ افتح نسخة المعاينة بدل الصفحة البيضاء.
+      if (location.protocol === 'file:') location.replace('./فتح-التطبيق.html');
+    </script>
+  </head>
+  <body>
+    <noscript>يجب تفعيل JavaScript لتشغيل سوق البرامون.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
